@@ -170,31 +170,16 @@ make_link() {
 
 step_symlinks() {
   info "Creating symlinks..."
-  make_link "$DOTFILES/gitconfig"       "$HOME/.gitconfig"
-  make_link "$DOTFILES/zsh/zshrc"       "$HOME/.zshrc"
-  make_link "$DOTFILES/zsh/zprofile"    "$HOME/.zprofile"
-  make_link "$DOTFILES/zsh/zshenv"      "$HOME/.zshenv"
-  make_link "$DOTFILES/p10k.zsh"        "$HOME/.p10k.zsh"
-  make_link "$DOTFILES/tmux/tmux.conf"  "$HOME/.tmux.conf"
-}
+  make_link "$DOTFILES/gitconfig"        "$HOME/.gitconfig"
+  make_link "$DOTFILES/zsh/zshrc"        "$HOME/.zshrc"
+  make_link "$DOTFILES/zsh/zprofile"     "$HOME/.zprofile"
+  make_link "$DOTFILES/zsh/zshenv"       "$HOME/.zshenv"
+  make_link "$DOTFILES/p10k.zsh"         "$HOME/.p10k.zsh"
+  make_link "$DOTFILES/tmux/tmux.conf"   "$HOME/.tmux.conf"
 
-# ── 12. Configs that live under ~/.config ─────────────────────────────────────
-step_configs() {
-  info "Copying configs to ~/.config..."
-  mkdir -p "$HOME/.config"
-
-  # nvim
-  if [[ -d "$HOME/.config/nvim" && ! -L "$HOME/.config/nvim" ]]; then
-    warn "Backing up ~/.config/nvim → ~/.config/nvim.bak"
-    mv "$HOME/.config/nvim" "$HOME/.config/nvim.bak"
-  fi
-  cp -r "$DOTFILES/nvim" "$HOME/.config/nvim"
-  info "  nvim config copied"
-
-  # fish
-  mkdir -p "$HOME/.config/fish"
-  cp "$DOTFILES/fish/config.fish" "$HOME/.config/fish/config.fish"
-  info "  fish config copied"
+  # nvim and fish are symlinked so git pull on dotfiles propagates instantly
+  make_link "$DOTFILES/nvim"             "$HOME/.config/nvim"
+  make_link "$DOTFILES/fish/config.fish" "$HOME/.config/fish/config.fish"
 }
 
 # ── main ──────────────────────────────────────────────────────────────────────
