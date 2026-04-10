@@ -1,0 +1,135 @@
+[user]
+    # Do not guess the user's identity.
+    useConfigOnly = true
+    # Store name, email, signingkey in ~/.gitconfig.local (not tracked)
+
+[alias]
+    cleanup = "!git remote prune origin && git gc && git clean -df && git stash clear"
+
+    # Remove branches that have already been merged with master
+    dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+
+    day = "!sh -c 'git log --reverse --no-merges --branches=* --date=local --after=\"yesterday 11:59PM\" --author=\"`git config --get user.name`\"'"
+
+    # find commits by source code
+    fc = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short -S$1; }; f"
+
+[core]
+    excludesfile = ~/.gitignore
+    attributesfile = ~/.gitattributes
+    editor = nvim
+    pager = delta
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+    trustctime = false
+    precomposeUnicode = true
+    untrackedCache = true
+
+[init]
+    defaultBranch = main
+
+[apply]
+    whitespace = fix
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    light = false
+
+[merge]
+    conflictstyle = diff3
+
+[pager]
+    diff = delta | less --tabs=4 -RFX
+    show = delta | less --tabs=4 -RFX
+
+[color]
+    ui = auto
+
+[color "diff"]
+    meta = yellow bold
+    commit = green bold
+    frag = magenta bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+    newMoved = cyan
+    oldMoved = blue
+
+[color "branch"]
+    current = yellow reverse
+    local = yellow
+    remote = green
+
+[color "status"]
+    added = yellow
+    changed = green
+    untracked = cyan
+
+[mergetool]
+    prompt = true
+
+[mergetool "vimdiff"]
+    cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+[difftool]
+    prompt = false
+
+[diff]
+    colorMoved = default
+
+[url "git@github.com:"]
+    insteadOf = "gh:"
+    pushInsteadOf = "github:"
+    pushInsteadOf = "git://github.com/"
+
+[url "git://github.com/"]
+    insteadOf = "github:"
+
+[url "git@gist.github.com:"]
+    insteadOf = "gst:"
+    pushInsteadOf = "gist:"
+    pushInsteadOf = "git://gist.github.com/"
+
+[url "git://gist.github.com/"]
+    insteadOf = "gist:"
+
+[help]
+    autocorrect = immediate
+
+[pull]
+    rebase = false
+
+[push]
+    default = current
+    followTags = true
+
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    process = git-lfs filter-process
+    required = true
+
+[fetch]
+    prune = true
+
+[stash]
+    showPatch = true
+
+[log]
+    date = relative
+
+[commit]
+    gpgsign = true
+
+[gpg]
+    program = /opt/homebrew/bin/gpg
+    format = openpgp
+
+[http]
+    postBuffer = 157286400
+
+[include]
+    # machine-local overrides: name, email, signingkey
+    path = ~/.gitconfig.local
