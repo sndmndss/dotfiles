@@ -62,9 +62,11 @@ step_brew_packages() {
   info "Installing brew casks..."
   brew install --cask iterm2
 
-  # Nerd Font (Symbols only — used by p10k and nvim icons)
-  # Cask name from: https://github.com/ryanoasis/nerd-fonts#option-4-homebrew-fonts
-  brew install --cask font-symbols-only-nerd-font
+  # MesloLGS NF — full patched Nerd Font recommended by Powerlevel10k
+  # https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k
+  brew install --cask font-meslo-lg-nerd-font
+
+  warn "iTerm2 font: open Preferences → Profiles → Text → Font → set to 'MesloLGS NF'"
 
   info "Initialising git-lfs..."
   git lfs install
