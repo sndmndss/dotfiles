@@ -66,6 +66,10 @@ step_brew_packages() {
   # https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k
   brew install --cask font-meslo-lg-nerd-font
 
+  # GPG Suite — GUI for GPG key management and commit signing
+  # https://gpgtools.org
+  brew install --cask gpg-suite
+
   warn "iTerm2 font: open Preferences → Profiles → Text → Font → set to 'MesloLGS NF'"
 
   info "Initialising git-lfs..."
