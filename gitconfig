@@ -1,6 +1,8 @@
 [user]
     # Do not guess the user's identity.
     useConfigOnly = true
+	email = yanfedorov120505@gmail.com
+	name = sndmnds
     # Store name, email, signingkey in ~/.gitconfig.local (not tracked)
 
 [alias]

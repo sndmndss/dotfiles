@@ -1,11 +1,12 @@
-return {
-  dir = '~/github/beta-ai-descriptions',
-  cmd = 'AiDescribe',
-  keys = {
-    { '<leader>ad', desc = 'AI describe symbol' },
-  },
-  opts = {
-    provider = 'groq',
-    api_key = vim.env.GROQ_API_KEY,
-  },
-}
+return {}
+-- return {
+--   dir = '~/github/beta-ai-descriptions',
+--   cmd = 'AiDescribe',
+--   keys = {
+--     { '<leader>ad', desc = 'AI describe symbol' },
+--   },
+--   opts = {
+--     provider = 'groq',
+--     api_key = vim.env.GROQ_API_KEY,
+--   },
+-- }
