@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Write(**)",
+      "Bash"
+    ],
+    "deny": [
+      "Write(./.env)",
+      "Write(./.env.*)",
+      "Write(./secrets/**)",
+      "Write(./config/credentials.json)"
+    ]
+  },
+  "enabledPlugins": {
+    "developer-essentials@claude-code-workflows": true,
+    "python-development@claude-code-workflows": true,
+    "javascript-typescript@claude-code-workflows": true,
+    "rust-analyzer-lsp@claude-plugins-official": true,
+    "pyright-lsp@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
+  },
+  "voiceEnabled": true,
+  "autoApprove": {
+    "commands": true,
+    "fileReads": true,
+    "fileWrites": true,
+    "showDiffs": true,
+    "applyDiffs": false
+  },
+  "instructions": {
+    "style": {
+      "code_language_priority": [
+        "python",
+        "typescript",
+        "rust"
+      ],
+      "strict_typing": true,
+      "decimal_as_string": true,
+      "prefer_async": true,
+      "add_docstrings": "google",
+      "naming_convention": "snake_case"
+    },
+    "review": {
+      "require_security_check": true,
+      "require_typecheck": true,
+      "require_lint": true,
+      "include_summary_section": true
+    },
+    "commits": {
+      "format": "conventional_commits",
+      "examples": [
+        "feat:",
+        "fix:",
+        "refactor:",
+        "test:"
+      ]
+    },
+    "general_rules": [
+      "Write only docstrings explaining what the function does, without types or return descriptions.",
+      "Avoid global state and side effects.",
+      "Never use floating point for currency or precision math.",
+      "Always validate external input and sanitize filenames.",
+      "Prefer explicit imports over wildcards.",
+      "Always ask for confirmation before overwriting existing functions to ensure safety.",
+      "Always follow best practices for security, performance, and maintainability.",
+      "Always think about edge cases such as possible 0 division, empty inputs, and large datasets",
+      "Never push the code on github even with my approval"
+    ]
+  }
+}

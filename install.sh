@@ -180,6 +180,10 @@ step_symlinks() {
   # nvim and fish are symlinked so git pull on dotfiles propagates instantly
   make_link "$DOTFILES/nvim"             "$HOME/.config/nvim"
   make_link "$DOTFILES/fish/config.fish" "$HOME/.config/fish/config.fish"
+
+  # Claude Code
+  make_link "$DOTFILES/claude/CLAUDE.md"    "$HOME/.claude/CLAUDE.md"
+  make_link "$DOTFILES/claude/settings.json" "$HOME/.claude/settings.json"
 }
 
 # ── main ──────────────────────────────────────────────────────────────────────
