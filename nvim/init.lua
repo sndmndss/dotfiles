@@ -448,12 +448,16 @@ require('lazy').setup({
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
-        --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          --   mappings = {
+          --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          --   },
+          -- Disable treesitter in the previewer: newer nvim-treesitter removed
+          -- configs.is_enabled / parsers.ft_to_lang that telescope still calls.
+          preview = {
+            treesitter = { enable = false },
+          },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -729,6 +733,23 @@ require('lazy').setup({
             },
           },
         },
+        asm_lsp = {},
+        clangd = {
+          cmd = {
+            'clangd',
+            '--background-index',
+            '--clang-tidy',
+            '--header-insertion=iwyu',
+            '--completion-style=detailed',
+            '--function-arg-placeholders',
+            '--fallback-style=llvm',
+          },
+          init_options = {
+            usePlaceholders = true,
+            completeUnimported = true,
+            clangdFileStatus = true,
+          },
+        },
         pyright = {
           settings = {
             python = {
@@ -805,7 +826,8 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        -- c/cpp formatting handled by conform via clang-format (configured in custom/plugins/c.lua)
+        local disable_filetypes = {}
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
@@ -828,6 +850,7 @@ require('lazy').setup({
         json = { 'prettierd', 'prettier', stop_after_first = true },
         css = { 'prettierd', 'prettier', stop_after_first = true },
         scss = { 'prettierd', 'prettier', stop_after_first = true },
+        -- asm: rely on asm-lsp for formatting (no prettier support)
       },
     },
   },
@@ -1052,6 +1075,7 @@ require('lazy').setup({
           'tsx',
           'json',
           'css',
+          'asm',
         },
         auto_install = true,
         highlight = {
@@ -1060,6 +1084,36 @@ require('lazy').setup({
         },
         indent = { enable = true, disable = { 'ruby' } },
       }
+
+      -- Patch removed nvim-treesitter APIs that telescope still calls in its previewer
+      -- (previewers/utils.lua lines 135-141).
+      local parsers_ok, parsers = pcall(require, 'nvim-treesitter.parsers')
+      if parsers_ok and parsers then
+        if not parsers.ft_to_lang then
+          parsers.ft_to_lang = function(ft)
+            return vim.treesitter.language.get_lang(ft) or ft
+          end
+        end
+      end
+
+      local configs_ok, ts_configs = pcall(require, 'nvim-treesitter.configs')
+      if configs_ok and ts_configs then
+        if not ts_configs.is_enabled then
+          -- Return true only when a parser is actually available for the buffer/lang.
+          ts_configs.is_enabled = function(module, lang, bufnr)
+            if module ~= 'highlight' then
+              return false
+            end
+            local ok = pcall(vim.treesitter.get_parser, bufnr, lang)
+            return ok
+          end
+        end
+        if not ts_configs.get_module then
+          ts_configs.get_module = function(_)
+            return { additional_vim_regex_highlighting = false }
+          end
+        end
+      end
     end,
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
